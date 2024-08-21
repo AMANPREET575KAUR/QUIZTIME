@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color:beige;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .quiz-container {
+            background-color:rgb(240, 240, 184);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color:black;
+        }
+
+        #quiz {
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .options label {
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        button {
+            background-color:forestgreen;
+            color:whitesmoke;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color:black;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>QUIZ TIME</h1>
+        <div id="quiz">
+            
+        </div>
+        <button id="submit">Submit</button>
+        <div id="result"></div>
+    </div>
+    <script>
+        const quizData = [
+            {
+                question: "What is the full form of HTML?",
+                options: ["hyper text markup language", "hight text language", "hyper text make language", "hello language"],
+                correct: 0
+            },
+            {
+                question: "Which language is used for web development?",
+                options: ["Python", "JavaScript", "C++", "Java"],
+                correct: 1
+            },
+            {
+                question: "Which command is used for page break?",
+                options: ["hr","br","h1","page-break"],
+                correct: 1
+            },
+            {
+                question: "Which language is used for styling websites?",
+                options: ["JAVA", "CSS", "C", "C++"],
+                correct: 1
+            },
+            {
+                question: "How many types are there for css?",
+                options: ["3", "1", "2", "0"],
+                correct: 0
+            },
+            {
+                question: "Full form of CSS?",
+                options: ["cascading style sheet", "case senstive sheet", "cascading sheet", "styling sheet"],
+                correct: 0
+            },
+            {
+                question: "Which command is used for draw horizontal line?",
+                options: ["hr", "border-radius", "pre", "br"],
+                correct: 0
+            },
+            {
+                question: "Which property is used to change the text color?",
+                options: ["text-color", "fgcolor", "color", "font"],
+                correct: 1
+            },
+            {
+                question: "Which property is used to add space inside an element border?",
+                options: ["Padding", "margin", "space", "border"],
+                correct: 1
+            },
+            {
+                question: "Which property is used for change the background color?",
+                options: ["background", "background-color", "color", "background-text"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const quizContainer = document.getElementById('quiz');
+        const submitButton = document.getElementById('submit');
+        const resultContainer = document.getElementById('result');
+
+        function loadQuiz() {
+            const questionData = quizData[currentQuestion];
+            quizContainer.innerHTML = `
+                <div class="question">${questionData.question}</div>
+                <div class="options">
+                    ${questionData.options.map((option, index) => `
+                        <label>
+                            <input type="radio" name="answer" value="${index}">
+                            ${option}
+                        </label>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function getSelectedAnswer() {
+            const answers = document.querySelectorAll('input[name="answer"]');
+            let selectedAnswer;
+            answers.forEach(answer => {
+                if (answer.checked) {
+                    selectedAnswer = answer.value;
+                }
+            });
+            return selectedAnswer;
+        }
+
+        function showResult() {
+            quizContainer.innerHTML = '';
+            submitButton.style.display = 'none';
+            resultContainer.innerHTML = `You scored ${score} out of ${quizData.length}!`;
+        }
+
+        submitButton.addEventListener('click', () => {
+            const selectedAnswer = getSelectedAnswer();
+            if (selectedAnswer !== undefined) {
+                if (selectedAnswer == quizData[currentQuestion].correct) {
+                    score++;
+                }
+                currentQuestion++;
+                if (currentQuestion < quizData.length) {
+                    loadQuiz();
+                } else {
+                    showResult();
+                }
+            } else {
+                alert("Please select an answer before submitting!");
+            }
+        });
+
+        // Initialize the quiz
+        loadQuiz();
+    </script>
+</body>
+</html>
